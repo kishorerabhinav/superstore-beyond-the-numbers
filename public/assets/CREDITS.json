@@ -1,0 +1,191 @@
+{
+ "source": "Poly Haven (polyhaven.com)",
+ "licence": "CC0 1.0",
+ "assets": [
+  {
+   "id": "sofa_02",
+   "type": "model",
+   "url": "https://polyhaven.com/a/sofa_02"
+  },
+  {
+   "id": "sofa_03",
+   "type": "model",
+   "url": "https://polyhaven.com/a/sofa_03"
+  },
+  {
+   "id": "mid_century_lounge_chair",
+   "type": "model",
+   "url": "https://polyhaven.com/a/mid_century_lounge_chair"
+  },
+  {
+   "id": "modern_arm_chair_01",
+   "type": "model",
+   "url": "https://polyhaven.com/a/modern_arm_chair_01"
+  },
+  {
+   "id": "ArmChair_01",
+   "type": "model",
+   "url": "https://polyhaven.com/a/ArmChair_01"
+  },
+  {
+   "id": "modern_coffee_table_01",
+   "type": "model",
+   "url": "https://polyhaven.com/a/modern_coffee_table_01"
+  },
+  {
+   "id": "modern_coffee_table_02",
+   "type": "model",
+   "url": "https://polyhaven.com/a/modern_coffee_table_02"
+  },
+  {
+   "id": "side_table_01",
+   "type": "model",
+   "url": "https://polyhaven.com/a/side_table_01"
+  },
+  {
+   "id": "coffee_table_round_01",
+   "type": "model",
+   "url": "https://polyhaven.com/a/coffee_table_round_01"
+  },
+  {
+   "id": "modern_wooden_cabinet",
+   "type": "model",
+   "url": "https://polyhaven.com/a/modern_wooden_cabinet"
+  },
+  {
+   "id": "drawer_cabinet",
+   "type": "model",
+   "url": "https://polyhaven.com/a/drawer_cabinet"
+  },
+  {
+   "id": "dining_chair_02",
+   "type": "model",
+   "url": "https://polyhaven.com/a/dining_chair_02"
+  },
+  {
+   "id": "round_wooden_table_01",
+   "type": "model",
+   "url": "https://polyhaven.com/a/round_wooden_table_01"
+  },
+  {
+   "id": "bar_chair_round_01",
+   "type": "model",
+   "url": "https://polyhaven.com/a/bar_chair_round_01"
+  },
+  {
+   "id": "metal_office_desk",
+   "type": "model",
+   "url": "https://polyhaven.com/a/metal_office_desk"
+  },
+  {
+   "id": "classic_laptop",
+   "type": "model",
+   "url": "https://polyhaven.com/a/classic_laptop"
+  },
+  {
+   "id": "vintage_stapler",
+   "type": "model",
+   "url": "https://polyhaven.com/a/vintage_stapler"
+  },
+  {
+   "id": "binder_notebook",
+   "type": "model",
+   "url": "https://polyhaven.com/a/binder_notebook"
+  },
+  {
+   "id": "cardboard_box_01",
+   "type": "model",
+   "url": "https://polyhaven.com/a/cardboard_box_01"
+  },
+  {
+   "id": "wicker_basket_01",
+   "type": "model",
+   "url": "https://polyhaven.com/a/wicker_basket_01"
+  },
+  {
+   "id": "vintage_microwave",
+   "type": "model",
+   "url": "https://polyhaven.com/a/vintage_microwave"
+  },
+  {
+   "id": "vintage_electric_kettle",
+   "type": "model",
+   "url": "https://polyhaven.com/a/vintage_electric_kettle"
+  },
+  {
+   "id": "CoffeeCart_01",
+   "type": "model",
+   "url": "https://polyhaven.com/a/CoffeeCart_01"
+  },
+  {
+   "id": "potted_plant_01",
+   "type": "model",
+   "url": "https://polyhaven.com/a/potted_plant_01"
+  },
+  {
+   "id": "potted_plant_02",
+   "type": "model",
+   "url": "https://polyhaven.com/a/potted_plant_02"
+  },
+  {
+   "id": "potted_plant_04",
+   "type": "model",
+   "url": "https://polyhaven.com/a/potted_plant_04"
+  },
+  {
+   "id": "modern_ceiling_lamp_01",
+   "type": "model",
+   "url": "https://polyhaven.com/a/modern_ceiling_lamp_01"
+  },
+  {
+   "id": "wall_clock",
+   "type": "model",
+   "url": "https://polyhaven.com/a/wall_clock"
+  },
+  {
+   "id": "desk_lamp_arm_01",
+   "type": "model",
+   "url": "https://polyhaven.com/a/desk_lamp_arm_01"
+  },
+  {
+   "id": "smooth_concrete_floor",
+   "type": "texture",
+   "url": "https://polyhaven.com/a/smooth_concrete_floor"
+  },
+  {
+   "id": "oak_veneer_01",
+   "type": "texture",
+   "url": "https://polyhaven.com/a/oak_veneer_01"
+  },
+  {
+   "id": "terrazzo_tiles",
+   "type": "texture",
+   "url": "https://polyhaven.com/a/terrazzo_tiles"
+  },
+  {
+   "id": "plaster_grey_04",
+   "type": "texture",
+   "url": "https://polyhaven.com/a/plaster_grey_04"
+  },
+  {
+   "id": "concrete_tiles",
+   "type": "texture",
+   "url": "https://polyhaven.com/a/concrete_tiles"
+  },
+  {
+   "id": "asphalt_floor",
+   "type": "texture",
+   "url": "https://polyhaven.com/a/asphalt_floor"
+  },
+  {
+   "id": "brown_photostudio_02",
+   "type": "hdri",
+   "url": "https://polyhaven.com/a/brown_photostudio_02"
+  },
+  {
+   "id": "canary_wharf",
+   "type": "hdri",
+   "url": "https://polyhaven.com/a/canary_wharf"
+  }
+ ]
+}

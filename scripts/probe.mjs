@@ -1,0 +1,10 @@
+import puppeteer from "puppeteer-core"; import fs from "node:fs";
+const CHROME = "C:/Program Files/Google/Chrome/Application/chrome.exe";
+const b = await puppeteer.launch({ executablePath: fs.existsSync(CHROME) ? CHROME : CHROME.replace("Program Files", "Program Files (x86)"), headless: "new", args: ["--use-angle=d3d11", "--enable-gpu", "--ignore-gpu-blocklist", "--window-size=1600,900"] });
+const p = await b.newPage(); await p.setViewport({ width: 1600, height: 900 });
+await p.goto(process.argv[2] || "http://localhost:4173/"); await p.waitForFunction(() => !document.querySelector(".loading"), { timeout: 120000 });
+await p.click(".skip button"); await new Promise(r => setTimeout(r, 3500)); await p.screenshot({ path: "e2e-shots/n-explore.png" });
+await p.evaluate(() => [...document.querySelectorAll(".chip")].find(b => b.textContent === "Technology").click()); await new Promise(r => setTimeout(r, 5000)); await p.screenshot({ path: "e2e-shots/n-dept.png" });
+await p.evaluate(() => [...document.querySelectorAll(".nav button")].find(b => b.textContent === "Products").click()); await new Promise(r => setTimeout(r, 6000));
+await p.select("#p-sub", "Chairs"); await new Promise(r => setTimeout(r, 4000)); await p.screenshot({ path: "e2e-shots/n-products.png" });
+await b.close();
