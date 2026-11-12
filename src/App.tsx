@@ -11,18 +11,22 @@ import { setSound, whoosh } from "./audio/ambience";
 export default function App() {
   const [ds, setDs] = useState<Dataset | null>(null);
   const [err, setErr] = useState<string | null>(null);
+  const [webgl] = useState(hasWebGL);
   useEffect(() => { loadDataset().then(setDs).catch(e => setErr(String(e.message ?? e))); }, []);
   if (err) return <Message title="The dataset could not be loaded" body={`${err} Check that public/data/superstore.json exists (run npm run data), then reload.`} />;
   return <>
     {ds ? <AppStateProvider ds={ds}><Experience /></AppStateProvider> : null}
-    <Loader dataReady={!!ds} />
+    <Loader dataReady={!!ds} needs3d={webgl} />
   </>;
 }
 
 function Experience() {
   const { s } = useApp();
+  const { dispatch } = useApp();
   const [webgl] = useState(hasWebGL);
   const [showData, setShowData] = useState(false);
+  // no WebGL (e.g. Tableau Desktop's built-in browser): skip the film and open the analytics directly
+  useEffect(() => { if (!webgl && !s.introDone) dispatch({ type: "introDone" }); }, [webgl, s.introDone, dispatch]);
   const [glKey, setGlKey] = useState(0);
   useEffect(() => { setSound(s.sound); }, [s.sound]);
   useEffect(() => { if (s.dept || s.experience !== "explore") whoosh(); }, [s.dept, s.experience]);
@@ -33,7 +37,7 @@ function Experience() {
     document.body.classList.toggle("numbers-focus", focus); document.body.classList.toggle("numbers-soft", soft && !focus);
   }, [s.dept, s.experience, s.introDone, s.firstPerson]);
   return <>
-    {webgl ? <div className="stage"><SceneBoundary><StoreCanvas key={glKey} onLost={() => setTimeout(() => setGlKey(k => k + 1), 600)} /></SceneBoundary></div> : <div className="fallback2d"><p className="lede" style={{ maxWidth: 560 }}>This browser cannot run WebGL, so the 3D store is unavailable. The analytics below use the same data and filters.</p></div>}
+    {webgl ? <div className="stage"><SceneBoundary><StoreCanvas key={glKey} onLost={() => setTimeout(() => setGlKey(k => k + 1), 600)} /></SceneBoundary></div> : <div className="fallback2d"><div className="nogl"><div className="kick">3D view unavailable here</div><p className="lede">This window can't run 3D graphics (Tableau Desktop's built-in browser switches WebGL off). Open the dashboard on Tableau Public or in any web browser to walk the store. Every number here uses the same data, filters and definitions.</p></div></div>}
     {webgl ? <IntroOverlay /> : null}
     {s.introDone || !webgl ? <div className="ui">
       <TopBar onData={() => setShowData(true)} />

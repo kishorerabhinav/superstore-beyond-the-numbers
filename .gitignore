@@ -13,7 +13,7 @@
 .idea
 .vscode/*
 assets-src/
-data/
+/data/
 dist
 dist-ssr
 e2e-shots/

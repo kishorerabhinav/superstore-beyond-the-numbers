@@ -5,10 +5,10 @@ import { useApp } from "../state/AppState";
 import { kpis, NO_FILTERS, select, aggregate } from "../data/engine";
 import { money, pct, int, moneyFull } from "../data/format";
 
-export function Loader({ dataReady }: { dataReady: boolean }) {
+export function Loader({ dataReady, needs3d = true }: { dataReady: boolean; needs3d?: boolean }) {
   const { progress, active, total } = useProgress();
   const [gone, setGone] = useState(false);
-  const done = dataReady && !active && total > 0 && progress >= 100;
+  const done = dataReady && (!needs3d || (!active && total > 0 && progress >= 100));
   // wait until loading has stayed complete for a moment (drei reports 100% between batches), then roll the film
   useEffect(() => {
     if (!done) return;
