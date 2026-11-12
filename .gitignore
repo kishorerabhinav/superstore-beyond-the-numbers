@@ -29,3 +29,4 @@ tableau/*.twbx
 tableau/*.png
 tableau/superstore.hyper
 tableau/superstore_orders.csv
+*.twbr
