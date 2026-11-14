@@ -167,12 +167,11 @@ body.numbers-soft .stage canvas { filter: blur(1.2px) brightness(.85); }
 .plist button span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* loading / errors / fallback */
-.loading { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; background: #060607; transition: opacity 1.2s var(--ease); }
-.loading .inner { width: min(360px, 80vw); text-align: center; }
-.loading b { letter-spacing: .36em; font-size: var(--t3); font-weight: 800; }
-.loading .bar { height: 1px; background: var(--line); margin: var(--s4) 0 var(--s2); overflow: hidden; }
+.loading { position: fixed; left: 50%; bottom: 74px; transform: translateX(-50%); z-index: 20; display: flex; align-items: center; gap: 10px; padding: 8px 14px;
+  background: var(--glass-hi); border: .5px solid var(--line); border-radius: 999px; backdrop-filter: blur(14px); pointer-events: none; transition: opacity .8s var(--ease); }
+.loading .bar { width: 120px; height: 2px; background: var(--line); border-radius: 2px; overflow: hidden; }
 .loading .bar i { display: block; height: 100%; background: var(--amber); transition: width .3s; }
-.loading small { color: var(--ink-3); font-size: var(--t1); letter-spacing: .1em; text-transform: uppercase; }
+.loading small { color: var(--ink-2); font-size: var(--t1); letter-spacing: .08em; text-transform: uppercase; font-weight: 700; white-space: nowrap; }
 .modal { position: fixed; inset: 0; z-index: 30; display: grid; place-items: center; background: rgba(6, 6, 7, .6); backdrop-filter: blur(6px); }
 .modal .card { width: min(720px, 92vw); max-height: 86vh; overflow-y: auto; background: var(--char-2); border: .5px solid var(--line); border-radius: 18px; padding: var(--s5); }
 .modal h2 { margin: 0 0 var(--s3); font-weight: 300; font-size: var(--t5); }

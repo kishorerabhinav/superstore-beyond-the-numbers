@@ -114,7 +114,7 @@ const paramSource = `<datasource hasconnection='false' inline='true' name='Param
 const URL = process.env.APP_URL || APP_URL;
 const dashboard = `<dashboard name='Beyond the Numbers'>
 <style><style-rule element='table'><format attr='background-color' value='${C.bg}' /></style-rule></style>
-<size maxheight='1000' maxwidth='1920' minheight='800' minwidth='1280' sizing-mode='range' />
+<size sizing-mode='automatic' />
 <datasources />
 <zones><zone h='100000' id='1' type-v2='layout-basic' w='100000' x='0' y='0'><zone h='100000' id='2' param='${URL}' type-v2='web' w='100000' x='0' y='0'><zone-style><format attr='border-style' value='none' /><format attr='margin' value='0' /><format attr='padding' value='0' /><format attr='background-color' value='${C.bg}' /></zone-style></zone></zone></zones>
 <simple-id uuid='${guid()}' />

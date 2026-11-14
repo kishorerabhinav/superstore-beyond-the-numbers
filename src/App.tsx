@@ -10,7 +10,7 @@ import { Journey } from "./ui/Journey";
 const StoreView = lazy(() => import("./StoreView"));
 
 export type View = "journey" | "store";
-const initialView = (): View => { try { return new URLSearchParams(location.search).get("view") === "store" ? "store" : "journey"; } catch { return "journey"; } };
+const initialView = (): View => { try { return new URLSearchParams(location.search).get("view") === "journey" ? "journey" : "store"; } catch { return "store"; } };
 
 export default function App() {
   const [ds, setDs] = useState<Dataset | null>(null);

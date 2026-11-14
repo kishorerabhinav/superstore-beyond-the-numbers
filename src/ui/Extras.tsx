@@ -16,14 +16,15 @@ export function Loader({ dataReady, needs3d = true }: { dataReady: boolean; need
   useEffect(() => {
     if (!done) return;
     const t1 = setTimeout(() => { (window as unknown as { __sceneReady: boolean }).__sceneReady = true; window.dispatchEvent(new Event("scene-ready")); }, 1400);
-    const t2 = setTimeout(() => setGone(true), 2600);
+    const t2 = setTimeout(() => setGone(true), 900);
     return () => { clearTimeout(t1); clearTimeout(t2); };
   }, [done]);
   if (gone) return null;
   const pc = dataReady ? 8 + progress * 0.92 : 4;
+  // a small, non-blocking progress note: the store and its controls are usable while models stream in
   return <div className="loading" style={{ opacity: done ? 0 : 1 }} aria-live="polite">
-    <div className="inner"><b>SUPERSTORE</b><div className="bar"><i style={{ width: `${pc}%` }} /></div>
-      <small>{!dataReady ? "Reading 10,000 order lines" : assetsDone ? "Lighting the store" : `Building the store · ${Math.round(progress)}%`}</small></div>
+    <span className="bar"><i style={{ width: `${pc}%` }} /></span>
+    <small>{!dataReady ? "Reading 10,000 order lines" : assetsDone ? "Lighting the store" : `Loading the store · ${Math.round(progress)}%`}</small>
   </div>;
 }
 
