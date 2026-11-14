@@ -14,7 +14,8 @@ export const texUrl = (id: string, map: "diff" | "nor" | "rough") => `${BASE}ass
 
 /** Lite mode (integrated / software GPUs): physically based materials become Lambert materials with the same colour and texture.
  *  They compile several times faster and cost far less per pixel, which keeps weak GPUs from stalling or resetting. */
-export const LITE = { on: false };
+import { LITE } from "./shared";
+export { LITE };
 const liteCache = new Map<string, THREE.Material>();
 export function lite<T extends THREE.Material>(m: T): THREE.Material {
   if (!LITE.on) return m;

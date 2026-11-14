@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, animate } from "framer-motion";
 import { useApp, type Experience } from "../state/AppState";
 import { money, pct, int, signedPct } from "../data/format";
-import { camApi } from "../scene/CameraDirector";
+import { camApi } from "../scene/shared";
 import { NO_FILTERS, type Filters } from "../data/engine";
 
 /** Animated number that eases to its new value whenever it changes. */

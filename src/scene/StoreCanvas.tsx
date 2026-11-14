@@ -13,6 +13,7 @@ import { Atrium } from "./Atrium";
 import { CameraDirector } from "./CameraDirector";
 import { SHOTS } from "./layout";
 import { useApp, type Quality } from "../state/AppState";
+export { hasWebGL } from "./shared";
 
 export function StoreCanvas({ onLost }: { onLost?: () => void }) {
   const { s, dispatch } = useApp();
@@ -97,7 +98,3 @@ function Effects({ quality }: { quality: Quality }) {
   </EffectComposer>;
 }
 
-/** True if the browser can create a WebGL2 (or WebGL) context. */
-export function hasWebGL() {
-  try { const c = document.createElement("canvas"); return !!(c.getContext("webgl2") || c.getContext("webgl")); } catch { return false; }
-}

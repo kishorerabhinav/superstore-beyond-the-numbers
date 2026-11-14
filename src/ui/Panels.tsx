@@ -8,7 +8,7 @@ import { deptView, salesStory, profitStory, segmentStory, geoStory, productList,
 import { money, pct, int, MONTHS } from "../data/format";
 import { MonthlyChart, BarList, DiscountChart, SeasonChart, Histogram } from "./charts";
 import { Count } from "./Chrome";
-import { camApi } from "../scene/CameraDirector";
+import { camApi } from "../scene/shared";
 
 gsap.registerPlugin(ScrollTrigger);
 

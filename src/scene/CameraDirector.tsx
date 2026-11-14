@@ -5,13 +5,12 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { SHOTS, deptShot, STORE, type Shot } from "./layout";
 import { useApp, prefersReducedMotion } from "../state/AppState";
+import { camApi } from "./shared";
+export { camApi };
 
 /** Intro beats (the UI shows the caption for the current beat). */
 export const INTRO_BEATS = ["dark", "arrival", "approach", "doors", "enter", "technology", "appliances", "office", "furniture", "business", "done"] as const;
 
-type Api = { flyTo: (shot: Shot, opts?: { duration?: number; arc?: number }) => void; reset: () => void; path: (t: number) => void };
-/** Imperative camera API for UI components (scroll-driven Sales journey, reset button). */
-export const camApi: { current: Api | null } = { current: null };
 
 // Sales journey path: entrance → technology → office aisles → atrium → furniture → appliances → checkouts
 const JOURNEY: Shot[] = [SHOTS.salesStart, { pos: [-6, 3.2, 6], target: [-18, 1, 2] }, { pos: [-11, 2.4, -9], target: [-21, 1, -16] }, { pos: [-2, 5.5, -6], target: [0, 0.8, -15.5] },

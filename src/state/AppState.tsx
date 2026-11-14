@@ -2,7 +2,7 @@ import { createContext, useContext, useMemo, useReducer, type Dispatch, type Rea
 import { kpis, NO_FILTERS, type Dataset, type Filters, type Kpis } from "../data/engine";
 import { subCategoryStats } from "../data/derive";
 import type { DeptId } from "../scene/layout";
-import { LITE } from "../scene/assets";
+import { LITE } from "../scene/shared";
 
 export type Experience = "intro" | "explore" | "sales" | "profit" | "customers" | "geo" | "products";
 export type Quality = "high" | "medium" | "low";
