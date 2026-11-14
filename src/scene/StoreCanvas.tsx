@@ -3,7 +3,7 @@ import { Canvas, useThree } from "@react-three/fiber";
 import { Environment, PerformanceMonitor, AdaptiveDpr } from "@react-three/drei";
 import { EffectComposer, N8AO, Bloom, Vignette, ToneMapping, SMAA } from "@react-three/postprocessing";
 import { ToneMappingMode } from "postprocessing";
-import { Suspense, useEffect } from "react";
+import { Component, Suspense, useEffect, type ReactNode } from "react";
 import { hdriUrl } from "./assets";
 import { Building } from "./Building";
 import { Departments } from "./Departments";
@@ -74,7 +74,8 @@ function Lighting({ quality }: { quality: Quality }) {
   useEffect(() => { scene.fog = new THREE.Fog("#c9c3b8", 70, 190); }, [scene]);
   const profitMode = s.experience === "profit";
   return <>
-    <Environment files={hdriUrl("canary_wharf")} background backgroundBlurriness={0.04} backgroundIntensity={0.55} environmentIntensity={profitMode ? 0.22 : 0.42} />
+    {/* image-based lighting is optional: if the HDRI fails to load, the store keeps working with plain lights */}
+    <Optional><Suspense fallback={null}><Environment files={hdriUrl("canary_wharf")} background backgroundBlurriness={0.04} backgroundIntensity={0.55} environmentIntensity={profitMode ? 0.22 : 0.42} /></Suspense></Optional>
     <hemisphereLight args={["#fff4e6", "#2a2622", (profitMode ? 0.25 : 0.55) * (quality === "low" ? 1.6 : 1)]} />
     {/* soft skylight through the roof: the one shadow-casting light */}
     <directionalLight position={[-16, 34, 14]} intensity={profitMode ? 0.6 : 1.5} color="#fff0dc" castShadow={quality !== "low"}
@@ -85,6 +86,13 @@ function Lighting({ quality }: { quality: Quality }) {
     {/* canopy downlight at the entrance */}
     <pointLight position={[0, 4.0, 20]} intensity={22} distance={10} decay={1.6} color="#ffd9a8" />
   </>;
+}
+
+class Optional extends Component<{ children: ReactNode }, { failed: boolean }> {
+  state = { failed: false };
+  static getDerivedStateFromError() { return { failed: true }; }
+  componentDidCatch(e: Error) { console.warn("Optional scene part skipped:", e.message); }
+  render() { return this.state.failed ? null : this.props.children; }
 }
 
 function Effects({ quality }: { quality: Quality }) {
