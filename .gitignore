@@ -30,3 +30,4 @@ tableau/*.png
 tableau/superstore.hyper
 tableau/superstore_orders.csv
 *.twbr
+dist-debug

@@ -35,12 +35,12 @@ export function Journey({ onStore }: { onStore: () => void }) {
     const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) setActive(Number((e.target as HTMLElement).dataset.chap)); }), { root: el, rootMargin: "-40% 0px -55% 0px" });
     el.querySelectorAll(".chap").forEach(c => io.observe(c)); return () => io.disconnect();
   }, []);
-  const go = (i: number) => root.current?.querySelector(`[data-chap="${i}"]`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const go = (i: number) => { const el = root.current?.querySelector(`[data-chap="${i}"] .chap-in`) as HTMLElement | null; if (el && root.current) root.current.scrollTo({ top: el.offsetTop - 120, behavior: "smooth" }); }
 
   const k = j.k, money0 = (x: number) => money(x), pct1 = (x: number) => pct(x);
-  const kept = j.bands.filter(b => b.discount <= cap), keptSales = kept.reduce((a, b) => a + b.sales, 0), keptProfit = kept.reduce((a, b) => a + b.profit, 0);
   const levels = j.bands.map(b => b.discount);
   const ci = Math.min(capIdx, levels.length - 1), cap = ci >= levels.length - 1 ? 1 : levels[ci];
+  const kept = j.bands.filter(b => b.discount <= cap), keptSales = kept.reduce((a, b) => a + b.sales, 0), keptProfit = kept.reduce((a, b) => a + b.profit, 0);
   const topCat = j.cats[0], lowCat = [...j.cats].sort((a, b) => a.margin - b.margin)[0];
   const topRegion = j.regions[0], lowRegion = [...j.regions].sort((a, b) => a.margin - b.margin)[0];
   const consumer = j.segs[0];

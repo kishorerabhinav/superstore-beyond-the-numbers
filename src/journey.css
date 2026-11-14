@@ -9,7 +9,8 @@
 .journey .rail button.on { color: var(--ink); }
 .journey .rail button.on i { background: var(--amber); border-color: var(--amber); transform: scale(1.5); }
 .chap { min-height: 92vh; display: flex; align-items: center; padding: var(--s6) max(var(--s4), calc((100vw - 1040px) / 2)) var(--s6) max(200px, calc((100vw - 1040px) / 2)); border-bottom: .5px solid var(--line); }
-.chap-in { width: 100%; max-width: 1040px; display: flex; flex-direction: column; gap: var(--s5); }
+.chap { scroll-margin-top: 0; }
+.chap-in { scroll-margin-top: 120px; width: 100%; max-width: 1040px; display: flex; flex-direction: column; gap: var(--s5); }
 .chap-h .kick, .chap.end .kick { font-size: var(--t1); font-weight: 800; letter-spacing: .22em; text-transform: uppercase; color: var(--amber); }
 .chap-h h2, .chap.end h2 { margin: var(--s2) 0 0; font-family: var(--serif); font-weight: 400; font-size: clamp(30px, 3.6vw, 46px); line-height: 1.12; letter-spacing: -.01em; max-width: 22em; text-wrap: balance; }
 .chap-h h2 b { font-weight: 700; }

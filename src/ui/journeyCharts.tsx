@@ -41,7 +41,7 @@ export function MonthTrend({ data }: { data: { year: number; month: number; sale
   const key = data.map(d => Math.round(d.sales)).join(",");
   return <svg className="chart" viewBox={`0 0 ${W} ${H}`} width="100%" role="img" aria-label="Monthly sales and profit">
     <defs><linearGradient id="jg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#e7b46a" stopOpacity=".35" /><stop offset="1" stopColor="#e7b46a" stopOpacity="0" /></linearGradient></defs>
-    {y.ticks(4).map(t => <g key={t}><line x1={m.l} x2={W - m.r} y1={y(t)} y2={y(t)} stroke="rgba(243,239,231,.08)" strokeDasharray="1 3" /><text x={W - m.r} y={y(t) - 3} textAnchor="end">{money(t)}</text></g>)}
+    {y.ticks(4).map(t => <g key={t}><line x1={m.l} x2={W - m.r} y1={y(t)} y2={y(t)} stroke="rgba(243,239,231,.08)" strokeDasharray="1 3" /><text x={m.l} y={y(t) - 3}>{money(t)}</text></g>)}
     {data.map((d, i) => d.month === 0 ? <g key={i}><line x1={x(i)} x2={x(i)} y1={m.t} y2={H - m.b} stroke="rgba(243,239,231,.14)" strokeDasharray="1 3" /><text x={x(i) + 4} y={H - 8} style={{ fontSize: 12, fill: "#b9b3a8", fontWeight: 700 }}>{d.year}</text></g> : null)}
     <motion.path key={`a${key}`} d={a} fill="url(#jg)" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.2, delay: 0.5 }} />
     <motion.path key={`l${key}`} d={l} fill="none" stroke="#e7b46a" strokeWidth={1.8} initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.8, ease }} />
@@ -98,7 +98,7 @@ export function DiscountBars({ data, cap }: { data: { discount: number; sales: n
     {data.map(d => { const top = d.profit >= 0 ? y(d.profit) : y(0), h = Math.abs(y(d.profit) - y(0)), bx = x(d.discount)!, bw = x.bandwidth();
       return <g key={d.discount} opacity={capX != null && d.discount > cap ? 0.4 : 1}>
         <motion.rect x={bx} width={bw} rx={2} fill={d.profit < 0 ? "#f2a24a" : "#8fd3a8"} initial={{ y: y(0), height: 0 }} animate={{ y: top, height: Math.max(1, h) }} transition={{ duration: 0.9, ease }} />
-        <text className="val" x={bx + bw / 2} y={d.profit >= 0 ? top - 6 : top + h + 14} textAnchor="middle">{money(d.profit, 0)}</text>
+        <text className="val" x={bx + bw / 2} y={d.profit >= 0 ? top - 6 : y(0) - 6} textAnchor="middle" style={d.profit < 0 ? { fill: "#f2a24a" } : undefined}>{money(d.profit, 0)}</text>
         <text x={bx + bw / 2} y={H - m.b + 18} textAnchor="middle" style={{ fontSize: 12.5, fill: "#f3efe7", fontWeight: 700 }}>{d.discount ? `${Math.round(d.discount * 100)}%` : "None"}</text>
         <text className="ann" x={bx + bw / 2} y={H - m.b + 33} textAnchor="middle">{pct(d.margin, 0)}</text>
       </g>; })}
@@ -109,15 +109,17 @@ export function DiscountBars({ data, cap }: { data: { discount: number; sales: n
 /** Region × category margin matrix. */
 export function MarginMatrix({ data }: { data: { region: string; cells: { category: string; sales: number; margin: number }[] }[] }) {
   const cats = ["Furniture", "Office Supplies", "Technology"], cw = (W - 140) / 3, rh = 54, H = 40 + data.length * rh;
-  const col = (m: number) => m < 0 ? "rgba(242,162,74,.75)" : `rgba(143,211,168,${0.15 + Math.min(0.75, m * 3)})`;
+  const alpha = (m: number) => 0.15 + Math.min(0.75, m * 3);
+  const col = (m: number) => m < 0 ? "rgba(242,162,74,.75)" : `rgba(143,211,168,${alpha(m)})`;
+  const ink = (m: number) => (m < 0 || alpha(m) >= 0.5 ? "#141518" : "#f3efe7");
   return <svg className="chart" viewBox={`0 0 ${W} ${H}`} width="100%" role="img" aria-label="Profit margin by region and category">
     {cats.map((c, j) => <text key={c} x={140 + cw * j + cw / 2} y={20} textAnchor="middle" style={{ fontSize: 12.5, fill: "#b9b3a8", fontWeight: 700 }}>{c}</text>)}
     {data.map((r, i) => <g key={r.region}>
       <text x={0} y={40 + i * rh + rh / 2 + 4} style={{ fontSize: 13, fill: "#f3efe7", fontWeight: 700 }}>{r.region}</text>
       {cats.map((c, j) => { const cell = r.cells.find(x => x.category === c); if (!cell) return null; const cx = 140 + cw * j;
         return <g key={c}><motion.rect x={cx + 3} y={40 + i * rh + 3} width={cw - 6} height={rh - 6} rx={6} fill={col(cell.margin)} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: (i * 3 + j) * 0.04 }} />
-          <text x={cx + cw / 2} y={40 + i * rh + rh / 2 + 1} textAnchor="middle" style={{ fontSize: 17, fill: "#141518", fontWeight: 800 }}>{pct(cell.margin)}</text>
-          <text x={cx + cw / 2} y={40 + i * rh + rh / 2 + 16} textAnchor="middle" style={{ fontSize: 10.5, fill: "#141518", opacity: .75 }}>{money(cell.sales)} sales</text></g>; })}
+          <text x={cx + cw / 2} y={40 + i * rh + rh / 2 + 1} textAnchor="middle" style={{ fontSize: 17, fill: ink(cell.margin), fontWeight: 800 }}>{pct(cell.margin)}</text>
+          <text x={cx + cw / 2} y={40 + i * rh + rh / 2 + 16} textAnchor="middle" style={{ fontSize: 10.5, fill: ink(cell.margin), opacity: .8 }}>{money(cell.sales)} sales</text></g>; })}
     </g>)}
   </svg>;
 }
