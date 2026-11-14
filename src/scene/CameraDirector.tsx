@@ -55,7 +55,7 @@ export function CameraDirector() {
   useEffect(() => {
     const c = ctl.current; if (!c) return;
     c.setBoundary(new THREE.Box3(new THREE.Vector3(STORE.x0 - 6, 0, STORE.z0 - 4), new THREE.Vector3(STORE.x1 + 6, 30, STORE.z1 + 70)));
-    if (s.introDone) return;
+    if (s.introDone) { const o = SHOTS.overview; apply(new THREE.Vector3(...o.pos), new THREE.Vector3(...o.target), o.fov ?? 42); return; }
     const beat = (i: number) => () => dispatch({ type: "storyStep", value: i });
     const st = (sh: Shot) => ({ p: new THREE.Vector3(...sh.pos), t: new THREE.Vector3(...sh.target), f: sh.fov ?? 45 });
     const seq = [st(SHOTS.exteriorFar), st(SHOTS.exteriorNear), st(SHOTS.threshold), st(SHOTS.inside), st(SHOTS.reveal),

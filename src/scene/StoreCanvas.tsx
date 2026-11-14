@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { Canvas, useThree } from "@react-three/fiber";
-import { Environment, PerformanceMonitor, AdaptiveDpr, Preload } from "@react-three/drei";
+import { Environment, PerformanceMonitor, AdaptiveDpr } from "@react-three/drei";
 import { EffectComposer, N8AO, Bloom, Vignette, ToneMapping, SMAA } from "@react-three/postprocessing";
 import { ToneMappingMode } from "postprocessing";
 import { Suspense, useEffect } from "react";
@@ -36,11 +36,35 @@ export function StoreCanvas({ onLost }: { onLost?: () => void }) {
       <Fixtures />
       <People />
       <Atrium />
-      <Preload all />
+      <CompileInBackground />
     </Suspense>
     <CameraDirector />
     <Effects quality={q} />
   </Canvas>;
+}
+
+/** Compiles shaders a few objects per frame (one program per material/variant), so neither the page nor the GPU process stalls.
+ *  Compiling everything at once froze the tab for seconds and could trip Chrome's GPU watchdog on integrated GPUs. */
+function CompileInBackground() {
+  const { gl, scene, camera } = useThree();
+  useEffect(() => {
+    let alive = true, raf = 0;
+    const done = () => { if (!alive) return; (window as unknown as { __shadersReady: boolean }).__shadersReady = true; window.dispatchEvent(new Event("shaders-ready")); };
+    const start = setTimeout(() => {
+      const seen = new Set<string>(), queue: THREE.Object3D[] = [];
+      scene.traverse(o => { const m = o as THREE.Mesh; if (!m.isMesh) return; const mats = Array.isArray(m.material) ? m.material : [m.material];
+        const key = mats.map(x => x.uuid).join(",") + ((m as THREE.InstancedMesh).isInstancedMesh ? ":i" : "") + (m.castShadow ? ":s" : ""); if (!seen.has(key)) { seen.add(key); queue.push(m); } });
+      const step = () => {
+        if (!alive) return;
+        const t0 = performance.now();
+        while (queue.length && performance.now() - t0 < 30) { const o = queue.shift()!; const was = o.visible; o.visible = true; gl.compile(o, camera, scene); o.visible = was; }
+        if (queue.length) raf = requestAnimationFrame(step); else requestAnimationFrame(() => requestAnimationFrame(done));
+      };
+      raf = requestAnimationFrame(step);
+    }, 50);
+    return () => { alive = false; clearTimeout(start); cancelAnimationFrame(raf); };
+  }, [gl, scene, camera]);
+  return null;
 }
 
 function Lighting({ quality }: { quality: Quality }) {

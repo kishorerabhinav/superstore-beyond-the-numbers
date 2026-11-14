@@ -8,7 +8,10 @@ import { money, pct, int, moneyFull } from "../data/format";
 export function Loader({ dataReady, needs3d = true }: { dataReady: boolean; needs3d?: boolean }) {
   const { progress, active, total } = useProgress();
   const [gone, setGone] = useState(false);
-  const done = dataReady && (!needs3d || (!active && total > 0 && progress >= 100));
+  const [shaders, setShaders] = useState(() => !!(window as unknown as { __shadersReady?: boolean }).__shadersReady);
+  useEffect(() => { const f = () => setShaders(true); window.addEventListener("shaders-ready", f); return () => window.removeEventListener("shaders-ready", f); }, []);
+  const assetsDone = !active && total > 0 && progress >= 100;
+  const done = dataReady && (!needs3d || (assetsDone && shaders));
   // wait until loading has stayed complete for a moment (drei reports 100% between batches), then roll the film
   useEffect(() => {
     if (!done) return;
@@ -20,7 +23,7 @@ export function Loader({ dataReady, needs3d = true }: { dataReady: boolean; need
   const pc = dataReady ? 8 + progress * 0.92 : 4;
   return <div className="loading" style={{ opacity: done ? 0 : 1 }} aria-live="polite">
     <div className="inner"><b>SUPERSTORE</b><div className="bar"><i style={{ width: `${pc}%` }} /></div>
-      <small>{dataReady ? `Building the store · ${Math.round(progress)}%` : "Reading 10,000 order lines"}</small></div>
+      <small>{!dataReady ? "Reading 10,000 order lines" : assetsDone ? "Lighting the store" : `Building the store · ${Math.round(progress)}%`}</small></div>
   </div>;
 }
 

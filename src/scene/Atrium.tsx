@@ -10,7 +10,7 @@ import { ATRIUM } from "./layout";
 import { useApp } from "../state/AppState";
 import { geoStory } from "../data/derive";
 import { money, pct, int } from "../data/format";
-import { useParts } from "./assets";
+import { useParts, lite } from "./assets";
 import { InstancedModel } from "./Instanced";
 
 const TABLE = { w: 11.4, d: 7.4, h: 0.86 };
@@ -56,7 +56,7 @@ function StatesMap() {
   const max = useMemo(() => Math.max(1, ...geo.states.map(g => g.sales)), [geo]);
   const byName = useMemo(() => new Map(geo.states.map(g => [g.key, g])), [geo]);
   const meshes = useRef<Record<string, THREE.Mesh | null>>({});
-  const mats = useMemo(() => Object.fromEntries(shapes.map(sh => [sh.name, new THREE.MeshStandardMaterial({ color: "#3a3d42", roughness: 0.55, metalness: 0.1 })])), [shapes]);
+  const mats = useMemo(() => Object.fromEntries(shapes.map(sh => [sh.name, lite(new THREE.MeshStandardMaterial({ color: "#3a3d42", roughness: 0.55, metalness: 0.1 })) as THREE.MeshStandardMaterial])), [shapes]);
   const focus = s.experience === "geo";
   useFrame((_, dt) => {
     const k = Math.min(1, dt * 3);

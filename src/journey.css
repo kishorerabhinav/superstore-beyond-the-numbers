@@ -1,0 +1,37 @@
+/* ---------- Analytical Journey ---------- */
+.ui-journey .top { background: linear-gradient(180deg, rgba(12, 13, 15, .96), rgba(12, 13, 15, .86)); backdrop-filter: blur(12px); z-index: 6; }
+.ui-journey .filters { position: fixed; z-index: 6; }
+.journey { position: fixed; inset: 0; overflow-y: auto; scroll-behavior: smooth; padding: 112px 0 0; scrollbar-width: thin;
+  background: radial-gradient(1200px 600px at 75% -10%, rgba(231, 180, 106, .08), transparent 60%), radial-gradient(900px 500px at 0% 40%, rgba(110, 168, 255, .05), transparent 60%), #0c0d0f; }
+.journey .rail { position: fixed; left: var(--s4); top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 3px; z-index: 5; }
+.journey .rail button { border: 0; background: none; display: flex; align-items: center; gap: 10px; padding: 4px 0; font-size: var(--t1); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); text-align: left; transition: color .3s; }
+.journey .rail button i { width: 6px; height: 6px; border-radius: 50%; border: 1px solid var(--ink-3); transition: all .3s; flex: none; }
+.journey .rail button.on { color: var(--ink); }
+.journey .rail button.on i { background: var(--amber); border-color: var(--amber); transform: scale(1.5); }
+.chap { min-height: 92vh; display: flex; align-items: center; padding: var(--s6) max(var(--s4), calc((100vw - 1040px) / 2)) var(--s6) max(200px, calc((100vw - 1040px) / 2)); border-bottom: .5px solid var(--line); }
+.chap-in { width: 100%; max-width: 1040px; display: flex; flex-direction: column; gap: var(--s5); }
+.chap-h .kick, .chap.end .kick { font-size: var(--t1); font-weight: 800; letter-spacing: .22em; text-transform: uppercase; color: var(--amber); }
+.chap-h h2, .chap.end h2 { margin: var(--s2) 0 0; font-family: var(--serif); font-weight: 400; font-size: clamp(30px, 3.6vw, 46px); line-height: 1.12; letter-spacing: -.01em; max-width: 22em; text-wrap: balance; }
+.chap-h h2 b { font-weight: 700; }
+.chap-h h2 .pos { color: var(--green); }
+.chap-h h2 .neg { color: var(--loss); }
+.chap-h .lede { margin-top: var(--s3); max-width: 44em; color: var(--ink-2); font-size: var(--t3); }
+.bigs { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--s4) var(--s5); border-top: .5px solid var(--line-2); padding-top: var(--s4); }
+.bigstat .v { font-size: clamp(40px, 4.6vw, 68px); font-weight: 200; letter-spacing: -.03em; line-height: 1; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.bigstat .v.pos { color: var(--green); }
+.bigstat .v.neg { color: var(--loss); }
+.bigstat .v.amber { color: var(--amber); }
+.bigstat .l { margin-top: var(--s2); font-size: var(--t1); font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); line-height: 1.4; }
+.chap-chart { background: rgba(255, 255, 255, .02); border: .5px solid var(--line); border-radius: 18px; padding: var(--s4); display: flex; flex-direction: column; gap: var(--s4); }
+.chap-chart .row .n { font-size: var(--t3); }
+.chart .val.big { font-size: 15px; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s5); }
+.sub { font-size: var(--t1); font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-2); margin: 0 0 var(--s2); }
+.whatif-row { display: flex; align-items: center; gap: var(--s3); flex-wrap: wrap; font-size: var(--t2); color: var(--ink-2); }
+.whatif-row label { font-weight: 700; letter-spacing: .08em; text-transform: uppercase; font-size: var(--t1); }
+.whatif-row input { flex: 1; min-width: 180px; max-width: 360px; accent-color: var(--amber); }
+.whatif-row .num { font-size: var(--t4); color: var(--ink); font-weight: 300; min-width: 90px; }
+.chap.end { min-height: 70vh; }
+.btns { display: flex; gap: var(--s2); margin-top: var(--s3); }
+.srcnote { margin-top: var(--s5); color: var(--ink-3); font-size: var(--t1); font-family: var(--serif); font-style: italic; }
+@media (max-width: 1100px) { .journey .rail { display: none; } .chap { padding-left: var(--s4); } .two-col { grid-template-columns: 1fr; } }

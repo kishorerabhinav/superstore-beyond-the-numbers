@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { DEPARTMENTS, type Department } from "./layout";
 import { useApp } from "../state/AppState";
 import { Model } from "./Instanced";
-import { useSurface } from "./assets";
+import { useSurface, lite } from "./assets";
 
 /** Canvas texture with crisp text in the UI typeface (waits for the web font). */
 export function useLabelTexture(lines: { text: string; size: number; weight?: number; color?: string; tracking?: number }[], w = 1024, h = 160, bg = "transparent") {
@@ -35,12 +35,12 @@ function Dept({ d }: { d: Department }) {
   const glow = useRef(0);
   const strip = useRef<THREE.MeshBasicMaterial>(null), light = useRef<THREE.PointLight>(null);
   const terrazzo = useSurface("terrazzo_tiles", [w / 4, dpt / 4]), oak = useSurface("oak_veneer_01", [w / 2.2, dpt / 0.5]);
-  const floorMat = useMemo(() => {
+  const floorMat = useMemo(() => lite((() => {
     if (d.floor === "terrazzo") return new THREE.MeshStandardMaterial({ ...terrazzo, color: "#e7e4df", roughness: 0.35, envMapIntensity: 0.7 });
     if (d.floor === "oak") return new THREE.MeshStandardMaterial({ ...oak, color: "#dcc09d", roughness: 0.55 });
     if (d.floor === "walnut") return new THREE.MeshStandardMaterial({ ...oak, color: "#8a6446", roughness: 0.5 });
     return new THREE.MeshStandardMaterial({ ...terrazzo, color: "#a9a49c", roughness: 0.4, envMapIntensity: 0.6 });
-  }, [d.floor, terrazzo, oak]);
+  })()), [d.floor, terrazzo, oak]);
   const label = useLabelTexture([{ text: d.name.toUpperCase(), size: 92, weight: 700, tracking: 18, color: "#17181b" }], 1400, 220, "#f3efe7");
   const accent = useMemo(() => new THREE.Color(d.accent), [d.accent]);
   const dimmed = s.dept != null && !active;

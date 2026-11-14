@@ -12,6 +12,20 @@ export const modelUrl = (key: string) => POLYHAVEN.has(key) ? `${BASE}assets/mod
 export const hdriUrl = (id: string) => `${BASE}assets/hdri/${id}_1k.hdr`;
 export const texUrl = (id: string, map: "diff" | "nor" | "rough") => `${BASE}assets/textures/${id}_${map}.jpg`;
 
+/** Lite mode (integrated / software GPUs): physically based materials become Lambert materials with the same colour and texture.
+ *  They compile several times faster and cost far less per pixel, which keeps weak GPUs from stalling or resetting. */
+export const LITE = { on: false };
+const liteCache = new Map<string, THREE.Material>();
+export function lite<T extends THREE.Material>(m: T): THREE.Material {
+  if (!LITE.on) return m;
+  const s = m as unknown as THREE.MeshStandardMaterial;
+  if (!(s.isMeshStandardMaterial)) return m;
+  const hit = liteCache.get(m.uuid); if (hit) return hit;
+  const l = new THREE.MeshLambertMaterial({ name: m.name, color: s.color, map: s.map, emissive: s.emissive, emissiveMap: s.emissiveMap, emissiveIntensity: s.emissiveIntensity,
+    transparent: s.transparent, opacity: s.opacity, side: s.side, depthWrite: s.depthWrite, toneMapped: s.toneMapped, vertexColors: s.vertexColors });
+  liteCache.set(m.uuid, l); return l;
+}
+
 export interface Part { geometry: THREE.BufferGeometry; material: THREE.Material; name: string }
 
 /** Flattens a GLB into (geometry, material) parts with the node transforms baked in, ready for instancing. */
@@ -36,7 +50,8 @@ export function useParts(key: string): { parts: Part[]; size: THREE.Vector3; box
 }
 
 /** Glass from Blender arrives with transmission, which forces an extra render pass; swap it for a cheap reflective glass. */
-export function fixMaterial(m: THREE.Material): THREE.Material {
+export function fixMaterial(m: THREE.Material): THREE.Material { return lite(fixMaterialFull(m)); }
+function fixMaterialFull(m: THREE.Material): THREE.Material {
   const sm = m as THREE.MeshPhysicalMaterial;
   if (m.name === "Glass" || m.name === "Acrylic" || (sm.transmission ?? 0) > 0) {
     return new THREE.MeshPhysicalMaterial({ name: m.name, color: "#cfdce0", roughness: 0.04, metalness: 0, transparent: true, opacity: m.name === "Glass" ? 0.16 : 0.3,

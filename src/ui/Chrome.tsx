@@ -12,29 +12,34 @@ export function Count({ value, fmt, delay = 0 }: { value: number; fmt: (v: numbe
   return <>{fmt(v)}</>;
 }
 
-const NAV: [Experience, string][] = [["explore", "Explore"], ["sales", "Sales journey"], ["profit", "Profitability"], ["customers", "Customers"], ["geo", "Geography"], ["products", "Products"]];
+const NAV: [Experience, string][] = [["explore", "Explore"], ["sales", "Store tour"], ["profit", "Profitability"], ["customers", "Customers"], ["geo", "Geography"], ["products", "Products"]];
 
-export function TopBar({ onData }: { onData: () => void }) {
+export function TopBar({ onData, view, setView }: { onData: () => void; view: "journey" | "store"; setView: (v: "journey" | "store") => void }) {
   const { s, dispatch } = useApp();
+  const store = view === "store";
   return <header className="top">
     <div className="brand"><b>SUPERSTORE</b><span>Beyond the Numbers</span></div>
-    <nav className="nav" aria-label="Experiences">
-      {NAV.map(([id, label]) => <button key={id} aria-pressed={s.experience === id} onClick={() => dispatch({ type: "experience", value: id })}>{label}</button>)}
+    <nav className="nav" aria-label="Views">
+      <button aria-pressed={!store} onClick={() => setView("journey")}>Analytical journey</button>
+      {store ? NAV.map(([id, label]) => <button key={id} aria-pressed={s.experience === id} onClick={() => dispatch({ type: "experience", value: id })}>{label}</button>)
+        : <button aria-pressed={false} onClick={() => setView("store")}>3D store</button>}
     </nav>
     <div className="tools">
-      <button className="icon-btn" title="Walk the store (first person)" aria-pressed={s.firstPerson} onClick={() => dispatch({ type: "firstPerson", value: !s.firstPerson })}>
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4"><circle cx="8" cy="3" r="1.6" /><path d="M8 5v5l-2.5 4M8 10l2.5 4M5 7.5h6" /></svg>Walk</button>
-      <button className="icon-btn" title="Reset camera" onClick={() => { dispatch({ type: "dept", value: null }); camApi.current?.reset(); }}>
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4"><path d="M3 8a5 5 0 1 0 1.6-3.7M3 2.5v2.8h2.8" /></svg></button>
-      <button className="icon-btn" title={s.sound ? "Mute sound" : "Turn sound on"} aria-pressed={s.sound} onClick={() => dispatch({ type: "sound", value: !s.sound })}>
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4"><path d="M2.5 6h2.5l3.5-3v10L5 10H2.5z" fill="currentColor" stroke="none" />{s.sound ? <path d="M11 5.5c1 1.4 1 3.6 0 5M12.8 4c1.8 2.3 1.8 5.7 0 8" /> : <path d="M11 6l3.5 4M14.5 6L11 10" />}</svg></button>
+      {store ? <>
+        <button className="icon-btn" title="Walk the store (first person)" aria-pressed={s.firstPerson} onClick={() => dispatch({ type: "firstPerson", value: !s.firstPerson })}>
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4"><circle cx="8" cy="3" r="1.6" /><path d="M8 5v5l-2.5 4M8 10l2.5 4M5 7.5h6" /></svg>Walk</button>
+        <button className="icon-btn" title="Reset camera" onClick={() => { dispatch({ type: "dept", value: null }); camApi.current?.reset(); }}>
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4"><path d="M3 8a5 5 0 1 0 1.6-3.7M3 2.5v2.8h2.8" /></svg></button>
+        <button className="icon-btn" title={s.sound ? "Mute sound" : "Turn sound on"} aria-pressed={s.sound} onClick={() => dispatch({ type: "sound", value: !s.sound })}>
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4"><path d="M2.5 6h2.5l3.5-3v10L5 10H2.5z" fill="currentColor" stroke="none" />{s.sound ? <path d="M11 5.5c1 1.4 1 3.6 0 5M12.8 4c1.8 2.3 1.8 5.7 0 8" /> : <path d="M11 6l3.5 4M14.5 6L11 10" />}</svg></button>
+      </> : null}
       <button className="icon-btn" title="How the numbers are calculated" onClick={onData}>Data</button>
     </div>
   </header>;
 }
 
 const FIELDS: { key: keyof Filters; label: string; dim: string }[] = [
-  { key: "region", label: "Region", dim: "region" }, { key: "category", label: "Category", dim: "category" }, { key: "segment", label: "Segment", dim: "segment" }, { key: "shipMode", label: "Ship mode", dim: "shipMode" }];
+  { key: "year", label: "Year", dim: "year" }, { key: "region", label: "Region", dim: "region" }, { key: "category", label: "Category", dim: "category" }, { key: "segment", label: "Segment", dim: "segment" }, { key: "shipMode", label: "Ship mode", dim: "shipMode" }];
 
 export function FiltersBar() {
   const { s, dispatch } = useApp();
@@ -42,8 +47,8 @@ export function FiltersBar() {
   return <div className="filters" role="group" aria-label="Filters">
     {FIELDS.map(f => <div key={f.key} className={`pill${s.filters[f.key] ? " on" : ""}`}>
       <label htmlFor={`f-${f.key}`}>{f.label}</label>
-      <select id={`f-${f.key}`} value={(s.filters[f.key] as string) ?? ""} onChange={e => dispatch({ type: "filter", key: f.key, value: e.target.value || null })}>
-        <option value="">All</option>{[...s.ds.dict[f.dim]].sort().map(v => <option key={v} value={v}>{v}</option>)}
+      <select id={`f-${f.key}`} value={s.filters[f.key] != null ? String(s.filters[f.key]) : ""} onChange={e => dispatch({ type: "filter", key: f.key, value: e.target.value ? (f.key === "year" ? Number(e.target.value) : e.target.value) : null })}>
+        <option value="">All</option>{(f.dim === "year" ? s.ds.years.map(String) : [...s.ds.dict[f.dim]].sort()).map(v => <option key={v} value={v}>{v}</option>)}
       </select></div>)}
     {any ? <button className="clear" onClick={() => dispatch({ type: "resetFilters" })}>Clear</button> : null}
   </div>;

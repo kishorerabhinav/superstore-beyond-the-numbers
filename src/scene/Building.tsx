@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { useGLTF, MeshReflectorMaterial } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
-import { modelUrl, useSurface, fixMaterial } from "./assets";
+import { modelUrl, useSurface, fixMaterial, lite } from "./assets";
 import { STORE } from "./layout";
 import { useApp } from "../state/AppState";
 
@@ -21,11 +21,11 @@ export function Building() {
       const m = o as THREE.Mesh; if (!m.isMesh) return;
       const mat = m.material as THREE.MeshStandardMaterial; const n = mat.name;
       m.receiveShadow = true; m.castShadow = !["Roof", "Parapet", "Plaza", "Road", "Floor", "FacadeGlass", "FasciaBand", "SideClad", "WallN", "WallE", "WallW"].includes(m.name);
-      if (n === "WallPlaster") m.material = new THREE.MeshStandardMaterial({ name: n, normalMap: wall.normalMap, color: "#e4ded5", roughness: 0.92 });
-      else if (n === "Oak") m.material = new THREE.MeshStandardMaterial({ name: n, ...oak, color: "#d9b48c", roughness: 0.6 });
-      else if (n === "PlazaPaving") m.material = new THREE.MeshStandardMaterial({ name: n, ...paving, color: "#b9b6b0" });
-      else if (n === "Asphalt") m.material = new THREE.MeshStandardMaterial({ name: n, ...asphalt, color: "#6c6c6c" });
-      else if (n === "FloorConcrete") m.material = new THREE.MeshStandardMaterial({ name: n, ...floor, color: "#d9d6d0", roughness: 0.38, metalness: 0.05, envMapIntensity: 0.7 });
+      if (n === "WallPlaster") m.material = lite(new THREE.MeshStandardMaterial({ name: n, normalMap: wall.normalMap, color: "#e4ded5", roughness: 0.92 }));
+      else if (n === "Oak") m.material = lite(new THREE.MeshStandardMaterial({ name: n, ...oak, color: "#d9b48c", roughness: 0.6 }));
+      else if (n === "PlazaPaving") m.material = lite(new THREE.MeshStandardMaterial({ name: n, ...paving, color: "#b9b6b0" }));
+      else if (n === "Asphalt") m.material = lite(new THREE.MeshStandardMaterial({ name: n, ...asphalt, color: "#6c6c6c" }));
+      else if (n === "FloorConcrete") m.material = lite(new THREE.MeshStandardMaterial({ name: n, ...floor, color: "#d9d6d0", roughness: 0.38, metalness: 0.05, envMapIntensity: 0.7 }));
       else if (n === "SignLetters") { const e = mat.clone(); e.emissive.set("#ffe7c2"); e.emissiveIntensity = 5; e.toneMapped = false; m.material = e; m.castShadow = false; }
       else m.material = fixMaterial(mat);
       if (n === "Glass") { m.castShadow = false; m.renderOrder = 2; }

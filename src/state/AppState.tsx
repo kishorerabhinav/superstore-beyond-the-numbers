@@ -2,6 +2,7 @@ import { createContext, useContext, useMemo, useReducer, type Dispatch, type Rea
 import { kpis, NO_FILTERS, type Dataset, type Filters, type Kpis } from "../data/engine";
 import { subCategoryStats } from "../data/derive";
 import type { DeptId } from "../scene/layout";
+import { LITE } from "../scene/assets";
 
 export type Experience = "intro" | "explore" | "sales" | "profit" | "customers" | "geo" | "products";
 export type Quality = "high" | "medium" | "low";
@@ -53,8 +54,8 @@ export function initialQuality(): Quality {
 export const prefersReducedMotion = () => typeof matchMedia !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 export function AppStateProvider({ ds, children }: { ds: Dataset; children: ReactNode }) {
-  const [s, dispatch] = useReducer(reducer, null, (): State => ({ ds, filters: NO_FILTERS, experience: "intro", dept: null, hoverDept: null, introDone: false,
-    sound: false, firstPerson: false, quality: initialQuality(), product: null, doorsOpen: false, storyStep: 0 }));
+  const [s, dispatch] = useReducer(reducer, null, (): State => { const quality = initialQuality(); LITE.on = quality === "low"; return { ds, filters: NO_FILTERS, experience: "explore", dept: null, hoverDept: null, introDone: true,
+    sound: false, firstPerson: false, quality, product: null, doorsOpen: true, storyStep: 10 }; });
   const k = useMemo(() => kpis(s.ds, s.filters), [s.ds, s.filters]);
   const subs = useMemo(() => subCategoryStats(s.ds, s.filters), [s.ds, s.filters]);
   const v = useMemo(() => ({ s, dispatch, k, subs }), [s, k, subs]);
